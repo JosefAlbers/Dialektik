@@ -76,9 +76,9 @@ def load_books(list_source=None, list_exclude=None, path_ds=PATH_DS):
     books = [[clean_str(s).strip() for s in book] for book in books]
     return books
 
-def pick_books(list_source=None, list_exclude=['MIRI', 'Machine Intelligence Research Institute'], list_idx=None, per_book=3):
+def pick_books(list_source=None, list_exclude=['MIRI', 'Machine Intelligence Research Institute'], list_idx=None, num_book=3, per_book=3):
     books = load_books(list_source, list_exclude)
-    list_idx = list_idx if list_idx else random.sample(range(len(books)), 3)
+    list_idx = list_idx if list_idx else random.sample(range(len(books)), num_book)
     print(f"Picked {list_idx}")
     picks = [books[i] for i in list_idx]
     synth = ''
@@ -118,14 +118,14 @@ def save_output(output, file_suffix=None, base_folder='syntheses'):
     file_suffix = f'_{file_suffix}' if file_suffix else ''
     os.makedirs(base_folder, exist_ok=True)
     date_str = datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    filename = os.path.join(base_folder, f'{date_str}_{file_suffix}.md')
+    filename = os.path.join(base_folder, f'{date_str}{file_suffix}.md')
     with open(filename, 'w') as f:
         f.write(output)
 
 def synthesize(prompt_thesis=PROMPT_THESIS, prompt_antithesis=PROMPT_ANTITHESIS, prompt_synthesis=PROMPT_SYNTHESIS,
                list_source=None, list_exclude=['MIRI', 'Machine Intelligence Research Institute'],
-               list_idx=None, per_book=3, api_model="mistralai/Mistral-Nemo-Instruct-2407"):
-    thesis, list_idx = pick_books(list_source, list_exclude, list_idx, per_book)
+               list_idx=None, num_book=3, per_book=3, api_model="mistralai/Mistral-Nemo-Instruct-2407"):
+    thesis, list_idx = pick_books(list_source, list_exclude, list_idx, num_book, per_book)
     prompt = f"{thesis}\n\n{prompt_thesis}"
     thesis_output = mistral_api(prompt, None, False, api_model=api_model)['responses'].strip()
     prompt_anti = f'{thesis_output}\n\n{prompt_antithesis}'
@@ -141,6 +141,7 @@ def main():
     parser = argparse.ArgumentParser(description="Dialektik: A tool for summarizing and synthesizing content.")
     parser.add_argument("--source", nargs='+', help="List of sources to use")
     parser.add_argument("--exclude", nargs='+', default=['MIRI', 'Machine Intelligence Research Institute'], help="List of terms to exclude")
+    parser.add_argument("--num-book", type=int, default=3, help="Number of books to use")
     parser.add_argument("--per-book", type=int, default=3, help="Number of bullet points per book")
     parser.add_argument("--model", default="mistralai/Mistral-Nemo-Instruct-2407", help="API model to use")
     parser.add_argument("--setup", action="store_true", help="Run setup function")
@@ -152,6 +153,7 @@ def main():
         synthesize(
             list_source=args.source,
             list_exclude=args.exclude,
+            num_book=args.num_book,
             per_book=args.per_book,
             api_model=args.model
         )

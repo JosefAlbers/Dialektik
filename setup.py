@@ -8,7 +8,7 @@ setup(
     url='https://github.com/JosefAlbers/Dialektik',
     py_modules=['dialektik'],
     packages=find_packages(),
-    version='0.0.1',
+    version='0.0.2',
     readme="README.md",
     author_email="albersj66@gmail.com",
     description="Merge. Synthesize. Create. Dialektik generates new content by fusing ideas from diverse sources, revealing unexpected insights and perspectives.",

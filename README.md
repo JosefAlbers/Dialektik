@@ -49,10 +49,10 @@ Dialektik can be used from the command line after installation. Here are some ex
    dialektik --source arxiv
    ```
 
-3. Set the number of bullet points per book and choose a different model:
+3. Set the number of books, bullet points per book, and choose a different model:
 
    ```
-   dialektik --per-book 5 --model "your-preferred-model"
+   dialektik --num-book 5 --per-book 4 --model "your-preferred-model"
    ```
 
 4. Run the setup function:
@@ -80,6 +80,7 @@ thesis, antithesis, synthesis = synthesize()
 # Customize the synthesis process
 output = synthesize(
    list_source=['your_source'],
+   num_book=3,
    per_book=3,
    api_model="mistralai/Mistral-Nemo-Instruct-2407"
 )
