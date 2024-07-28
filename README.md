@@ -1,54 +1,39 @@
 # Dialektik
 
-Merge. Synthesize. Create. Dialektik generates new content by fusing ideas from diverse sources, revealing unexpected insights and perspectives.
+Merge. Synthesize. Create. Dialektik generates new content by fusing ideas from diverse sources, revealing unexpected insights and perspectives through a dialectical process.
 
 ## Features
 
 - Loads and processes datasets from multiple sources
 - Summarizes text into concise bullet points
-- Synthesizes bullet points into detailed articles
+- Generates thesis, antithesis, and synthesis from summarized content
 - Supports various AI models for text generation
 - Model-agnostic design allows easy swapping of different LLMs
 
 ## Requirements
 
 - Required: `datasets`, `huggingface_hub`
-- Optional: `phi-3-vision-mlx` *(required only if you need to create a new dataset with the provided `setup()` function for custom dataset processing)*
+- Optional: `phi-3-vision-mlx` (required only if you need to create a new dataset with the provided `setup()` function for custom dataset processing)
 
 ## Installation
 
 To install Dialektik with core dependencies only:
 
-   ```
-   pip install dialektik
-   ```
+```
+pip install dialektik
+```
 
 To install Dialektik with all dependencies, including those required for the setup() function:
 
-   ```
-   pip install dialektik[setup]
-   ```
+```
+pip install dialektik[setup]
+```
 
 Note: Install the full version if you plan to process custom datasets using the `setup()` function.
 
-## Setup
-
-1. Clone the repository:
-
-   ```
-   git clone https://github.com/JosefAlbersç/Dialektik.git
-   cd Dialektik
-   ```
-
-2. Install the required dependencies:
-
-   ```
-   pip install -r requirements.txt
-   ```
-
 ## Usage
 
-## Command Line Interface
+### Command Line Interface
 
 Dialektik can be used from the command line after installation. Here are some example usages:
 
@@ -78,35 +63,31 @@ Dialektik can be used from the command line after installation. Here are some ex
 
 5. For a full list of options, use:
 
-    ```
-    dialektik --help
-    ```
+   ```
+   dialektik --help
+   ```
+
+### Python API
+
+You can also use Dialektik in your Python scripts:
+
+```python
+from dialektik import synthesize
+
+# Generate a synthesis with default settings
+thesis, antithesis, synthesis = synthesize()
+
+# Customize the synthesis process
+output = synthesize(
+   list_source=['your_source'],
+   per_book=3,
+   api_model="mistralai/Mistral-Nemo-Instruct-2407"
+)
+```
 
 ### Accessing the Dataset
 
-**Important Note**: The default dataset at 'JosefAlbers/StampyAI-alignment-research-dataset' is currently being prepared (ETA: 18 hours). Please check back later if unavailable.
-
-The default dataset is to be publicly available. You do not need to set up any environment variables or run the setup() function to use `dialektik` with this dataset.
-
-### Synthesizing content
-
-To generate a synthesis, simply run:
-
-   ```python
-   from dialektik import synthesize
-
-   output = synthesize()
-   ```
-
-You can customize the synthesis process by passing optional parameters:
-
-   ```python
-   output = synthesize(
-      list_source=['your_source'],
-      per_book=3,
-      api_model="mistralai/Mistral-Nemo-Instruct-2407"
-   )
-   ```
+The default dataset at 'JosefAlbers/StampyAI-alignment-research-dataset' is publicly available. You don't need to set up any environment variables or run the setup() function to use `dialektik` with this dataset.
 
 ### (Optional) Using Custom Datasets
 
@@ -122,13 +103,17 @@ Note: The `setup()` function provided in the code is a demonstration of how you 
 
 ## Customizing the LLM
 
-Dialektik is designed to be model-agnostic. To use a different language model:
+Dialektik is designed to be model-agnostic. The default model is "mistralai/Mistral-Nemo-Instruct-2407", but you can easily change this by passing a different `api_model` parameter to the `synthesize()` function. 
 
-1. Simply pass the name of your chosen model to the `synthesize()` function using the `api_model` parameter.
-2. Modify the `mistral_api()` function or create a new function that interfaces with your chosen LLM.
-3. Update the `synthesize()` function to use your new LLM interface.
+## Output
 
-The default model is "mistralai/Mistral-Nemo-Instruct-2407", but you can easily change this by passing a different `api_model` parameter to the `synthesize()` function.
+The `synthesize()` function generates three outputs:
+
+1. Thesis: An article exploring the main themes and insights from the selected sources.
+2. Antithesis: A text presenting alternative perspectives and counterarguments to the thesis.
+3. Synthesis: A reconciliation of the thesis and antithesis, presenting a new, unified viewpoint.
+
+All outputs are saved in the 'syntheses' folder with timestamps for easy reference.
 
 ## License
 
@@ -137,3 +122,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## Citation
 
 <a href="https://zenodo.org/doi/10.5281/zenodo.11403221"><img src="https://zenodo.org/badge/806709541.svg" alt="DOI"></a>
+
+## Contributing
+
+Contributions to Dialektik are always welcome! Please feel free to submit a Pull Request.
