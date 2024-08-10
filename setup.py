@@ -18,12 +18,9 @@ setup(
     license="MIT",
     python_requires=">=3.12.3",
     install_requires=requirements,
-    extra_require={
-        'setup':['phi-3-vision-mlx'],
-    },
     entry_points={
         "console_scripts": [
-            "dialektik = dialektik:main",
+            "dialektik = dialektik:synthesize",
         ],
     },
 )
