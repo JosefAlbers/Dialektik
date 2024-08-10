@@ -1,2 +1,5 @@
 datasets
 huggingface_hub
+phi_3_vision_mlx
+mlx
+fire

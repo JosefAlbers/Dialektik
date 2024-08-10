@@ -6,30 +6,28 @@ Merge. Synthesize. Create. Dialektik generates new content by fusing ideas from 
 
 - Loads and processes datasets from multiple sources
 - Summarizes text into concise bullet points
+- Performs semantic search for topic-based content selection
 - Generates thesis, antithesis, and synthesis from summarized content
-- Supports various AI models for text generation
-- Model-agnostic design allows easy swapping of different LLMs
+- Uses phi-3-vision-mlx for text generation and embeddings
 
 ## Requirements
 
-- Required: `datasets`, `huggingface_hub`
-- Optional: `phi-3-vision-mlx` (required only if you need to create a new dataset with the provided `setup()` function for custom dataset processing)
+- Python 3.8+
+- `datasets`
+- `huggingface_hub`
+- `phi_3_vision_mlx`
+- `mlx`
+- `fire`
 
 ## Installation
 
-To install Dialektik with core dependencies only:
+To install Dialektik with all required dependencies:
 
 ```
 pip install dialektik
 ```
 
-To install Dialektik with all dependencies, including those required for the setup() function:
-
-```
-pip install dialektik[setup]
-```
-
-Note: Install the full version if you plan to process custom datasets using the `setup()` function.
+Note: Make sure you have the necessary system requirements to run phi-3-vision-mlx and mlx.
 
 ## Usage
 
@@ -40,31 +38,37 @@ Dialektik can be used from the command line after installation. Here are some ex
 1. Generate a synthesis with default settings:
 
    ```
-   dialektik
+   python dialektik.py
    ```
 
-2. Specify sources:
+2. Specify a topic for semantic search:
 
    ```
-   dialektik --source arxiv
+   python dialektik.py --topic "AI agents"
    ```
 
-3. Set the number of books, bullet points per book, and choose a different model:
+3. Specify sources and exclude certain terms:
 
    ```
-   dialektik --num-book 5 --per-book 4 --model "your-preferred-model"
+   python dialektik.py --list_source arxiv --list_exclude MIRI "Machine Intelligence Research Institute"
    ```
 
-4. Run the setup function:
+4. Set the number of books and bullet points per book:
 
    ```
-   dialektik --setup
+   python dialektik.py --num_book 5 --per_book 4
    ```
 
-5. For a full list of options, use:
+5. Use a different language model via API:
 
    ```
-   dialektik --help
+   python dialektik.py --llm_model "mistralai/Mistral-Nemo-Instruct-2407"
+   ```
+
+6. For a full list of options, use:
+
+   ```
+   python dialektik.py --help
    ```
 
 ### Python API
@@ -79,18 +83,19 @@ thesis, antithesis, synthesis = synthesize()
 
 # Customize the synthesis process
 output = synthesize(
-   list_source=['your_source'],
+   topic="AI agents",
+   list_source=['arxiv'],
+   list_exclude=['MIRI', 'Machine Intelligence Research Institute'],
    num_book=3,
-   per_book=3,
-   api_model="mistralai/Mistral-Nemo-Instruct-2407"
+   per_book=3
 )
 ```
 
 ### Accessing the Dataset
 
-The default dataset at 'JosefAlbers/StampyAI-alignment-research-dataset' is publicly available. You don't need to set up any environment variables or run the setup() function to use `dialektik` with this dataset.
+The default dataset at 'JosefAlbers/StampyAI-alignment-research-dataset' is publicly available. You don't need to set up any environment variables to use `dialektik` with this dataset.
 
-### (Optional) Using Custom Datasets
+### Using Custom Datasets
 
 If you want to use your own dataset:
 
@@ -100,11 +105,9 @@ If you want to use your own dataset:
    - `HF_WRITE_TOKEN`: Hugging Face write token (for pushing datasets)
    - `HF_READ_TOKEN`: Hugging Face read token (for accessing private datasets)
 
-Note: The `setup()` function provided in the code is a demonstration of how you might process a custom dataset. Different datasets may require different processing steps, so you'll need to adapt this function to your specific needs.
+## Customizing the Model
 
-## Customizing the LLM
-
-Dialektik is designed to be model-agnostic. The default model is "mistralai/Mistral-Nemo-Instruct-2407", but you can easily change this by passing a different `api_model` parameter to the `synthesize()` function. 
+Dialektik now uses phi-3-vision-mlx for text generation and embeddings. This model is not easily swappable, but you can modify the `pv.load()` and `pv.generate()` calls in the code if you need to use a different model.
 
 ## Output
 
